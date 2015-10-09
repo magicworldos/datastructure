@@ -106,6 +106,11 @@ bool list_insert(s_list *list, int i, void *e)
 		return false;
 	}
 
+	if (i != 0 && i >= list->length)
+	{
+		return false;
+	}
+
 	//超过当前最大容量，请申原容量的2倍
 	if (list->length + 1 > list->size)
 	{
@@ -149,7 +154,29 @@ bool list_insert(s_list *list, int i, void *e)
 //删除第i个元素
 bool list_delete(s_list *list, int i)
 {
-	return false;
+	if (list == null || list->header == null)
+	{
+		return false;
+	}
+
+	if (i >= list->length)
+	{
+		return false;
+	}
+
+	//计算元素位置
+	s_node *node = (s_node *) ((char *) list->header + (i * sizeof(s_node)));
+	list->free_data(node->data);
+	//从i+1依次向前移动一个单元
+	for (int j = i; j < list->length - 1; ++j)
+	{
+		s_node *node_curr = (s_node *) ((char *) list->header + (j * sizeof(s_node)));
+		s_node *node_next = (s_node *) ((char *) list->header + ((j + 1) * sizeof(s_node)));
+		memcpy(node_curr, node_next, sizeof(s_node));
+	}
+	list->length--;
+
+	return true;
 }
 
 //对每个元素执行visit操作
