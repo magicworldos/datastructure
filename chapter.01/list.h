@@ -29,7 +29,9 @@ typedef struct
 	int size;
 	//内存空间的首地址
 	void *header;
+	//用于释放节点数据的回调函数
 	void (*free_data)();
+	//用于访问节点数据内容的回调函数
 	void (*visit_data)(void *data);
 } s_list;
 
