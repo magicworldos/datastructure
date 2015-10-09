@@ -29,10 +29,12 @@ typedef struct
 	int size;
 	//内存空间的首地址
 	void *header;
+	void (*free_data)();
+	void (*visit_data)(void *data);
 } s_list;
 
 //构建一个顺序线性表
-bool init_list(s_list *list, int ele_size);
+bool init_list(s_list *list, int ele_size, void (*free_data)(), void (*visit_data)());
 
 //销毁表
 bool destroy_list(s_list *list);
@@ -53,6 +55,6 @@ bool list_insert(s_list *list, int i, void *e);
 bool list_delete(s_list *list, int i);
 
 //对每个元素执行visit操作
-bool list_visit(s_list *list, void (*visit)(void *data));
+bool list_visit(s_list *list);
 
 #endif

@@ -11,7 +11,7 @@
 #include "list.h"
 
 //构建一个顺序线性表
-bool init_list(s_list *list, int ele_size)
+bool init_list(s_list *list, int ele_size, void (*free_data)(), void (*visit_data)())
 {
 	if (list == null)
 	{
@@ -26,6 +26,8 @@ bool init_list(s_list *list, int ele_size)
 	list->ele_size = ele_size;
 	list->size = INIT_SIZE;
 	list->length = 0;
+	list->free_data = free_data;
+	list->visit_data = visit_data;
 	return true;
 }
 
@@ -42,6 +44,8 @@ bool destroy_list(s_list *list)
 		return true;
 	}
 
+	clear_list(list);
+
 	free(list->header);
 
 	return true;
@@ -55,7 +59,15 @@ bool clear_list(s_list *list)
 		return false;
 	}
 
+	for (int i = 0; i < list->length; ++i)
+	{
+		//计算元素位置
+		s_node *node = (s_node *) ((char *) list->header + (i * sizeof(s_node)));
+		list->free_data(node->data);
+	}
+
 	list->length = 0;
+
 	return true;
 }
 
@@ -93,36 +105,44 @@ bool list_insert(s_list *list, int i, void *e)
 	{
 		return false;
 	}
+
+	//超过当前最大容量，请申原容量的2倍
+	if (list->length + 1 > list->size)
+	{
+		//申请新空间
+		void *p = realloc(list->header, list->size * sizeof(s_node) * 2);
+		if (p == null)
+		{
+			return false;
+		}
+		list->header = p;
+		list->size *= 2;
+	}
+
+	//创建新节点
 	s_node *p_ele = (s_node *) malloc(sizeof(s_node));
 	if (p_ele == null)
 	{
 		return false;
 	}
-	p_ele->data = (s_node *) malloc(list->ele_size);
-	if (p_ele->data == null)
+	//数据
+	p_ele->data = e;
+
+	//从尾到i依次向后移动一个单元
+	for (int j = list->length; j > i; --j)
 	{
-		return false;
+		s_node *node_pre = (s_node *) ((char *) list->header + ((j - 1) * sizeof(s_node)));
+		s_node *node_curr = (s_node *) ((char *) list->header + (j * sizeof(s_node)));
+		memcpy(node_curr, node_pre, sizeof(s_node));
 	}
+
+	//插入新元素
+	s_node *node = (s_node *) ((char *) list->header + (i * sizeof(s_node)));
+	memcpy(node, p_ele, sizeof(s_node));
+
+	//长度加1
 	list->length++;
-	//移动后续元素次数
-	int move_times = list->length - i;
-	//复制e元素的内容到第i个元素中
-	memcpy(p_ele->data, e, list->ele_size);
-	s_node temp;
-	s_node temp2;
-	//复制e元素的内容到第i个元素中
-	memcpy(&temp, p_ele, sizeof(s_node));
-	for (int j = 0; j < move_times; ++j)
-	{
-		//计算元素位置
-		s_node *node = (s_node *) ((char *) list->header + ((i + j) * sizeof(s_node)));
-		//复制第i个元素到temp中
-		memcpy(&temp2, node, sizeof(s_node));
-		//复制e元素的内容到第i个元素中
-		memcpy(node, &temp, sizeof(s_node));
-		//复制temp2到temp中
-		memcpy(&temp, &temp2, sizeof(s_node));
-	}
+
 	return true;
 }
 
@@ -133,7 +153,7 @@ bool list_delete(s_list *list, int i)
 }
 
 //对每个元素执行visit操作
-bool list_visit(s_list *list, void (*visit)(void *data))
+bool list_visit(s_list *list)
 {
 	if (list == null || list->header == null)
 	{
@@ -143,7 +163,7 @@ bool list_visit(s_list *list, void (*visit)(void *data))
 	{
 		//计算元素位置
 		s_node *node = (s_node *) ((char *) list->header + (i * sizeof(s_node)));
-		visit(node->data);
+		list->visit_data(node->data);
 	}
 
 	return true;
