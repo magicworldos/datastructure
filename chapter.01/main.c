@@ -6,25 +6,28 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include "list.h"
 
-typedef struct
+void print_int(void *data)
 {
-	//起始地址
-	void *addr;
-	//元素个数
-	int count;
-	//顺序线性表大小
-	int size;
-} List;
-
-int init_list(List *list)
-{
-	return 0;
+	printf("%d\n", *((int *) data));
 }
 
 int main(int argc, char **args)
 {
-	printf("Hello World!\n");
+	s_list list;
+
+	init_list(&list, sizeof(int));
+
+	for (int i = 100; i < 110; ++i)
+	{
+		int *e = (int *)malloc(sizeof(int));
+		*e = i;
+		list_insert(&list, 0, e);
+	}
+
+	list_visit(&list, print_int);
 
 	return 0;
 }
