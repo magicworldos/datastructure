@@ -78,17 +78,18 @@ int main(int argc, char **args)
 	stu2->age = 21;
 	stu2->name = (char *) malloc(20);
 	memcpy(stu2->name, "zhaoy", 20);
-	list_insert(&list_stu, 0, stu2);
+	list_insert(&list_stu, 1, stu2);
 	//插入数据
 	student *stu3 = (student *) malloc(sizeof(student));
 	stu3->no = 15100103;
 	stu3->age = 22;
 	stu3->name = (char *) malloc(20);
 	memcpy(stu3->name, "liuzh", 20);
-	list_insert(&list_stu, 0, stu3);
+	list_insert(&list_stu, 2, stu3);
 
 	//显示list中所有内容
 	list_visit(&list_stu);
+
 	//销毁list
 	destroy_list(&list_stu);
 
