@@ -53,11 +53,17 @@ bool clear_list(s_list *list)
 
 	//从头节点开始释放
 	s_node *p = list->header;
-	while (p != null)
+	bool isend = false;
+	while (p != null && !isend)
 	{
 		//释放内存
 		list->free_data(p->data);
 		s_node *t = p;
+		//下一个节点为头节点时既是循环链表结束条件
+		if (t->next == list->header)
+		{
+			isend = true;
+		}
 		p = p->next;
 		free(t);
 	}
@@ -88,7 +94,8 @@ bool get_element(s_list *list, int i, void *e)
 
 	s_node *p = list->header;
 	int j = 0;
-	while (p != null)
+	bool isend = false;
+	while (p != null && !isend)
 	{
 		//找到第i个元素
 		if (j == i)
@@ -125,8 +132,40 @@ bool list_insert(s_list *list, int i, void *e)
 	//如果头节点为空
 	if (i == 0)
 	{
+		if (list->header == null)
+		{
+			//插入新节点
+			list->header = p_new;
+			//循环链表
+			list->header->next = list->header;
+			//长度加1
+			list->length++;
+			return true;
+		}
+
+		//如果只有一个节点
+		if (list->header == list->header->next)
+		{
+			//插入新节点
+			p_new->next = list->header;
+			list->header->next = p_new;
+			//设置新的头节点
+			list->header = p_new;
+			//长度加1
+			list->length++;
+			return true;
+		}
+
+		//找到脚节点
+		s_node *footer = list->header;
+		while (footer->next != list->header)
+		{
+			footer = footer->next;
+		}
+
 		//设置头节点为插入元素
 		p_new->next = list->header;
+		footer->next = p_new;
 		list->header = p_new;
 		//长度加1
 		list->length++;
@@ -173,10 +212,31 @@ bool list_delete(s_list *list, int i)
 	//如果是头节点
 	if (i == 0)
 	{
+		//如果只有一个节点
+		if (list->header == list->header->next)
+		{
+			//释放内存
+			list->free_data(list->header->data);
+			free(list->header);
+			//长度减1
+			list->length--;
+			list->header = null;
+			return true;
+		}
+
+		//找到脚节点
+		s_node *footer = list->header;
+		while (footer->next != list->header)
+		{
+			footer = footer->next;
+		}
+
 		s_node *p_del = list->header;
 		//删除头节点
 		list->header = list->header->next;
-		//释放内存
+		//设置新的循环
+		footer->next = list->header;
+
 		list->free_data(p_del->data);
 		free(p_del);
 		//长度减1
@@ -220,9 +280,14 @@ bool list_visit(s_list *list)
 
 	//顺序访问每一个元素
 	s_node *p = list->header;
-	while (p != null)
+	bool isend = false;
+	while (p != null && !isend)
 	{
 		list->visit_data(p->data);
+		if (p->next == list->header)
+		{
+			isend = true;
+		}
 		p = p->next;
 	}
 	return true;
