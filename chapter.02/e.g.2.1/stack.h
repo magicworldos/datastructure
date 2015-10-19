@@ -1,12 +1,5 @@
-/*
- * list.h
- *
- *  Created on: Oct 9, 2015
- *      Author: lidq
- */
-
-#ifndef _LIST_H_
-#define _LIST_H_
+#ifndef _STACK_H_
+#define _STACK_H_
 
 #include "typedef.h"
 

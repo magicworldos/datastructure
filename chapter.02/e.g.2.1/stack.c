@@ -1,10 +1,3 @@
-/*
- * list.c
- *
- *  Created on: Oct 9, 2015
- *      Author: lidq
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
