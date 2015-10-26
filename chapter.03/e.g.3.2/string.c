@@ -135,6 +135,33 @@ bool str_sub(char *sub, char *str, int pos, int len)
 	return true;
 }
 
+//使用new串替换str中所有的old
+bool str_replace(char *str, char *old, char *new)
+{
+	if (str == null || old == null || new == null)
+	{
+		return false;
+	}
+
+	int ind = -1;
+	int old_len = str_length(old);
+	int new_len = str_length(new);
+	do
+	{
+		ind = str_index(str, old, 0);
+		if (ind < 0)
+		{
+			break;
+		}
+
+		str_delete(str, ind, old_len);
+		str_insert(str, new, ind);
+	}
+	while (1);
+
+	return true;
+}
+
 /*
  * 返回str_ind在str中第pos个字符后出现的位置
  * 采用KMP算法

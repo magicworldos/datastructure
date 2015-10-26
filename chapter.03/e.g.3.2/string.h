@@ -25,6 +25,9 @@ bool str_concat(char *str_new, char *str0, char *str1);
 //将str从pos位置切割出len个字符到sub中
 bool str_sub(char *sub, char *str, int pos, int len);
 
+//使用new串替换str中所有的old
+bool str_replace(char *str, char *old, char *new);
+
 //返回str_ind在str中第pos个字符后出现的位置
 int str_index(char *str, char *str_ind, int pos);
 
