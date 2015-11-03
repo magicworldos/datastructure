@@ -1,5 +1,5 @@
 all:
-	gcc -std=c99 main.c array.c -o main
+	gcc -m32 -std=c99 main.c array.c -o main
 	./main
 	
 clean:
