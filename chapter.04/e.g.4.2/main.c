@@ -83,7 +83,7 @@ int main(int argc, char **args)
 	}
 	printf("\n");
 
-	//压缩矩阵
+	//转置矩阵
 	matrix r_mat;
 	r_mat.data = (m_data *) malloc(sizeof(m_data) * 8);
 	r_mat.m = mat.n;
@@ -115,7 +115,7 @@ int main(int argc, char **args)
 		printf("(%d, %d, %d), ", r_mat.data[p].i, r_mat.data[p].j, r_mat.data[p].val);
 	}
 
-	//压缩矩阵
+	//迅速转置矩阵
 	matrix e_mat;
 	e_mat.data = (m_data *) malloc(sizeof(m_data) * 8);
 	e_mat.m = mat.n;
