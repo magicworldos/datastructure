@@ -8,6 +8,7 @@
 #define N (4)
 #define O (3)
 
+//学生数据结构
 typedef struct
 {
 	int no;
@@ -15,16 +16,19 @@ typedef struct
 	int age;
 } student;
 
+//访问int类型
 void visit_int(int *p)
 {
 	printf("%d, ", *p);
 }
 
+//访问double类型
 void visit_double(double *p)
 {
 	printf("%f, ", *p);
 }
 
+//访问student类型
 void visit_student(student *p)
 {
 	if (p == null)
@@ -40,6 +44,7 @@ void visit_student(student *p)
 	printf("%d\t%s\t%d\t", p->no, p->name, p->age);
 }
 
+//释放student类型的函数
 void free_student(student *p)
 {
 	if (p == null)
