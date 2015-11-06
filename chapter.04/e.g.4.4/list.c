@@ -123,6 +123,7 @@ void list_depth(s_list *list, int *depth)
 	}
 }
 
+//复制广义表
 void list_copy(s_list *target, s_list *source)
 {
 	if (source == null)
