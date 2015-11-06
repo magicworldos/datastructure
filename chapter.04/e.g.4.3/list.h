@@ -33,11 +33,13 @@ typedef struct s_list
 //追加节点
 bool list_append(s_list *list, s_list* nlist);
 
+//初始化表节点
 bool list_init(s_list *list);
 
 //插入原子节点或子表
 bool list_insert_value(s_list *list, int tag, int exp, int val);
 
+//显示多项式
 void list_display(s_list *list, char ch);
 
 #endif /* LIST_H_ */

@@ -29,6 +29,7 @@ bool list_append(s_list *list, s_list* nlist)
 	return true;
 }
 
+//初始化表节点
 bool list_init(s_list *list)
 {
 	list->tag = 0;
@@ -54,6 +55,7 @@ bool list_insert_value(s_list *list, int tag, int exp, int val)
 	return true;
 }
 
+//显示多项式
 void list_display(s_list *list, char ch)
 {
 	if (list == null)
@@ -61,21 +63,26 @@ void list_display(s_list *list, char ch)
 		return;
 	}
 
+	//如果当前节点是子表
 	if (list->tag)
 	{
 		printf("(");
+		//递归显示子表
 		list_display(list->child, ch - 1);
 		printf(")%c^%d", ch, list->exp);
 	}
+	//如果当前节点是原子节点
 	else
 	{
+		//显示原子内容
 		printf("%+d%c^%d", list->coe, ch, list->exp);
 	}
 
+	//如果下一节点不为空
 	if (list->next != null)
 	{
-		list = list->next;
 		printf("+");
-		list_display(list, ch);
+		//递归显示下一节点
+		list_display(list->next, ch);
 	}
 }
