@@ -7,6 +7,8 @@
 
 #include "list.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 //追加节点
 bool list_append(s_list *list, s_list* nlist)
@@ -111,6 +113,7 @@ void list_depth(s_list *list, int *depth)
 	//如果下一节点不为空
 	if (list->next != null)
 	{
+		//求同级子表最大深度
 		int m = 0;
 		list_depth(list->next, &m);
 		if (*depth < m)
@@ -118,5 +121,32 @@ void list_depth(s_list *list, int *depth)
 			*depth = m;
 		}
 	}
+}
 
+void list_copy(s_list *target, s_list *source)
+{
+	if (source == null)
+	{
+		return;
+	}
+
+	memcpy(target, source, sizeof(s_list));
+
+	//如果当前节点是子表
+	if (source->tag)
+	{
+		//递归复制子表
+		s_list *clist = (s_list *) malloc(sizeof(s_list));
+		list_copy(clist, source->child);
+		target->child = clist;
+	}
+
+	//如果下一节点不为空
+	if (source->next != null)
+	{
+		//递归复制同级广义表
+		s_list *nlist = (s_list *) malloc(sizeof(s_list));
+		list_copy(nlist, source->next);
+		target->next = nlist;
+	}
 }

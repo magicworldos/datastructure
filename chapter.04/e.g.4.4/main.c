@@ -84,12 +84,23 @@ int main(int argc, char **args)
 
 	//显示多项式
 	list_display(list6, 'z');
-
 	printf("\n");
 
+	//求广义表list6深度
 	int depth = 0;
 	list_depth(list6, &depth);
-	printf("depth = %d ", depth);
+	printf("depth = %d \n", depth);
+
+	s_list *list13 = (s_list *) malloc(sizeof(s_list));
+	list_copy(list13, list6);
+	//显示多项式
+	list_display(list13, 'z');
+	printf("\n");
+
+	//求广义表list13深度
+	depth = 0;
+	list_depth(list13, &depth);
+	printf("depth = %d \n", depth);
 
 	return 0;
 }

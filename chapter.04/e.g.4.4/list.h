@@ -45,4 +45,7 @@ void list_display(s_list *list, char ch);
 //求广义表深度
 void list_depth(s_list *list, int *depth);
 
+//复制广义表
+void list_copy(s_list *target, s_list *source);
+
 #endif /* LIST_H_ */
