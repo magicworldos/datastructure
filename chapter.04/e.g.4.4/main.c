@@ -102,5 +102,10 @@ int main(int argc, char **args)
 	list_depth(list13, &depth);
 	printf("depth = %d \n", depth);
 
+	//销毁广义表，释放内存
+	list_destory(list6);
+	//销毁广义表，释放内存
+	list_destory(list13);
+
 	return 0;
 }

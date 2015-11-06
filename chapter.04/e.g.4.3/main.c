@@ -83,5 +83,8 @@ int main(int argc, char **args)
 
 	list_display(list6, 'z');
 
+	//销毁广义表，释放内存
+	list_destory(list6);
+
 	return 0;
 }

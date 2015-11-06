@@ -30,6 +30,9 @@ typedef struct s_list
 
 } s_list;
 
+//销毁广义表
+void list_destory(s_list *list);
+
 //追加节点
 bool list_append(s_list *list, s_list* nlist);
 

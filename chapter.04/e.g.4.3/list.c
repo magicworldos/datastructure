@@ -7,6 +7,32 @@
 
 #include "list.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+//销毁广义表
+void list_destory(s_list *list)
+{
+	if (list == null)
+	{
+		return;
+	}
+
+	//如果下一节点不为空
+	if (list->next != null)
+	{
+		//递归销毁下一节点
+		list_destory(list->next);
+	}
+
+	//如果当前节点是子表
+	if (list->tag)
+	{
+		//递归销毁子表
+		list_destory(list->child);
+	}
+
+	free(list);
+}
 
 //追加节点
 bool list_append(s_list *list, s_list* nlist)
