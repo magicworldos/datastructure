@@ -6,6 +6,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include "tree.h"
 
 //初始化树
@@ -87,6 +88,64 @@ bool tree_init_node(s_node *node, void *data)
 	return true;
 }
 
+//生成哈夫曼编码
+void tree_huffman_code(s_tree *tree, s_node *node, int *no, char **code)
+{
+	if (tree == null)
+	{
+		return;
+	}
+	if (tree->root == null)
+	{
+		return;
+	}
+	if (node == null)
+	{
+		return;
+	}
+
+	//如果左右节点均为空，说明是叶子节点
+	if (node->left_child == null && node->right_child == null)
+	{
+		s_node *p = node;
+		int i = 0;
+		char *temp = malloc(MAX_CODE_LEN);
+		//由叶子结节向根节点循环生成哈夫曼编码
+		while (p->parent != null)
+		{
+			//如果当前结节为其父节点的左孩子，则编码为0
+			if (p->parent->left_child == p)
+			{
+				temp[i] = '0';
+			}
+			//如果当前结节为其父节点的左孩子，则编码为1
+			else if (p->parent->right_child == p)
+			{
+				temp[i] = '1';
+			}
+			//向上遍历
+			p = p->parent;
+			i++;
+		}
+
+		//由于上由叶子节点向上遍历，所以要将生成的编码逆转
+		int len = i;
+		i--;
+		for (int j = 0; j < len; j++, i--)
+		{
+			code[*no][j] = temp[i];
+		}
+		//字符串结尾
+		code[*no][len] = '\0';
+		free(temp);
+
+		(*no)++;
+	}
+
+	tree_huffman_code(tree, node->left_child, no, code);
+	tree_huffman_code(tree, node->right_child, no, code);
+}
+
 //前序遍历
 void tree_preamble_visit(s_tree *tree, s_node *node)
 {
@@ -157,10 +216,10 @@ bool tree_create(s_tree *tree, s_list *list)
 		list_delete(list, p1->data);
 
 		//构建新节点
-		n_node->parent = null;
 		n_node->data = null;
 		n_node->left_child = n_left;
 		n_node->right_child = n_right;
+		n_node->parent = null;
 		n_left->parent = n_node;
 		n_right->parent = n_node;
 
