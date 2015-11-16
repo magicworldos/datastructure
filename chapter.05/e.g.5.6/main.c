@@ -99,12 +99,22 @@ void sample_A()
 	//生成哈夫曼编码
 	tree_huffman_code(&tree, tree.root, &no, code);
 
+	//显示生成的哈夫曼编码
 	for (int i = 0; i < 9; i++)
 	{
 		printf("%s ", code[i]);
-		free(code[i]);
 	}
 	printf("\n");
+
+	//根据哈夫曼编码解码找到原数据
+	for (int i = 0; i < 9; i++)
+	{
+		int *d = null;
+		tree_get_data_by_huffman_code(&tree, code[i], (void **) &d);
+		visit_int(d);
+		free(code[i]);
+	}
+	printf("\n\n");
 	free(code);
 
 	//销毁树
@@ -185,9 +195,19 @@ void sample_B()
 	//生成哈夫曼编码
 	tree_huffman_code(&tree, tree.root, &no, code);
 
+	//显示生成的哈夫曼编码
 	for (int i = 0; i < 8; i++)
 	{
 		printf("%s ", code[i]);
+	}
+	printf("\n");
+
+	//根据哈夫曼编码解码找到原数据
+	for (int i = 0; i < 8; i++)
+	{
+		int *d = null;
+		tree_get_data_by_huffman_code(&tree, code[i], (void **) &d);
+		visit_int(d);
 		free(code[i]);
 	}
 	printf("\n");

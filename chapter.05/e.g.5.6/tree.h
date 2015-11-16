@@ -52,6 +52,9 @@ bool tree_init_node(s_node *node, void *data);
 //生成哈夫曼编码
 void tree_huffman_code(s_tree *tree, s_node *node, int *no, char **code);
 
+//找到指定哈夫曼编码的节点数据
+bool tree_get_data_by_huffman_code(s_tree *tree, char *code, void **data);
+
 //前序遍历
 void tree_preamble_visit(s_tree *tree, s_node *node);
 
