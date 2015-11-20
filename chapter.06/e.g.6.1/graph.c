@@ -108,7 +108,7 @@ bool graph_display(s_graph *graph)
 		{
 			if (graph->arccell[i][j] == INFINITY)
 			{
-				printf(" ><, ");
+				printf(" --, ");
 			}
 			else
 			{
