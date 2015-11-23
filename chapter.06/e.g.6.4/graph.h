@@ -10,7 +10,7 @@
 
 #include "typedef.h"
 
-//边或边
+//边
 typedef struct s_arccell
 {
 	//权重

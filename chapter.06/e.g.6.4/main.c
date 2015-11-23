@@ -28,14 +28,14 @@ int main(int argc, char **args)
 	*t2 = 12;
 	*t3 = 54;
 	*t4 = 75;
-	//弧数据项
+	//边数据项
 	int *d0 = (int *) malloc(sizeof(int));
 	int *d1 = (int *) malloc(sizeof(int));
 	int *d2 = (int *) malloc(sizeof(int));
 	int *d3 = (int *) malloc(sizeof(int));
 	int *d4 = (int *) malloc(sizeof(int));
 	int *d5 = (int *) malloc(sizeof(int));
-	//弧数据
+	//边数据
 	*d0 = 56;
 	*d1 = 34;
 	*d2 = 75;
@@ -50,7 +50,7 @@ int main(int argc, char **args)
 	graph_set_vertex(&graph, 3, t3);
 	graph_set_vertex(&graph, 4, t4);
 
-	//插入弧数据
+	//插入边数据
 	graph_insert_arccell(&graph, 0, 1, 15, d0);
 	graph_insert_arccell(&graph, 1, 3, 23, d1);
 	graph_insert_arccell(&graph, 1, 4, 71, d2);
@@ -60,7 +60,7 @@ int main(int argc, char **args)
 
 	/*
 	 * 显示邻接表，格式如下：
-	 * [顶点索引, 顶点数据] -> (弧尾指向顶点的索引, 弧权重, 弧数据) -> (弧尾指向顶点的索引, 弧权重, 弧数据)
+	 * [顶点索引, 顶点数据] -> (边尾指向顶点的索引, 边权重, 边数据) -> (边尾指向顶点的索引, 边权重, 边数据)
 	 */
 	graph_visit(&graph);
 
