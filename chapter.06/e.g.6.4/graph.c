@@ -26,12 +26,16 @@ bool graph_init(s_graph *graph, int vertex_size, void (*visit_vertex)(), void (*
 	graph->size = vertex_size;
 	//申请顶点内存
 	graph->vertex = (s_vertex *) malloc(sizeof(s_vertex) * vertex_size);
-
+	graph->arccel_temp = (s_arccell **) malloc(sizeof(s_arccell *) * vertex_size);
+	graph->arccel_temp2 = (s_arccell **) malloc(sizeof(s_arccell *) * vertex_size);
 	//初始化顶点
 	for (int i = 0; i < vertex_size; i++)
 	{
 		graph->vertex[i].data = null;
 		graph->vertex[i].arccel_first = null;
+
+		graph->arccel_temp[i] = null;
+		graph->arccel_temp2[i] = null;
 	}
 
 	//显示顶点数据的回调函数
@@ -51,6 +55,9 @@ bool graph_destroy(s_graph *graph)
 	}
 
 	free(graph->vertex);
+
+	free(graph->arccel_temp);
+	free(graph->arccel_temp2);
 
 	return true;
 }
@@ -117,40 +124,24 @@ bool graph_insert_arccell(s_graph *graph, int i_index, int j_index, int weight, 
 		//设置顶点的每一条边
 		graph->vertex[i_index].arccel_first = arccel;
 	}
-	else
-	{
-		//找到顶点弧中最后一条弧
-		s_arccell *p = graph->vertex[i_index].arccel_first;
-		while (p->next_i != null)
-		{
-			p = p->next_i;
-		}
-		if (p->i_index == i_index)
-		{
-			//追加新弧
-			p->next_i = arccel;
-		}
-	}
 
 	if (graph->vertex[j_index].arccel_first == null)
 	{
 		//设置顶点的每一条边
 		graph->vertex[j_index].arccel_first = arccel;
 	}
-	else
+
+	if (graph->arccel_temp[j_index] != null)
 	{
-		//找到顶点弧中最后一条弧
-		s_arccell *p = graph->vertex[j_index].arccel_first;
-		while (p->next_j != null)
-		{
-			p = p->next_j;
-		}
-		if (p->j_index == j_index)
-		{
-			//追加新弧
-			p->next_j = arccel;
-		}
+		graph->arccel_temp[j_index]->next_j = arccel;
 	}
+	graph->arccel_temp[j_index] = arccel;
+
+	if (graph->arccel_temp[i_index] != null)
+	{
+		graph->arccel_temp[i_index]->next_i = arccel;
+	}
+	graph->arccel_temp[i_index] = arccel;
 
 	return true;
 }

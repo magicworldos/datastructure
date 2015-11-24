@@ -47,6 +47,8 @@ typedef struct
 	void (*visit_vertex)();
 	//显示边数据的回调函数
 	void (*visit_arccell)();
+	s_arccell **arccel_temp;
+	s_arccell **arccel_temp2;
 } s_graph;
 
 //初始化图

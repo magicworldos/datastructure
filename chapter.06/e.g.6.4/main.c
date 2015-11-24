@@ -51,12 +51,19 @@ int main(int argc, char **args)
 	graph_set_vertex(&graph, 4, t4);
 
 	//插入边数据
+//	graph_insert_arccell(&graph, 0, 1, 15, d0);
+//	graph_insert_arccell(&graph, 1, 3, 23, d1);
+//	graph_insert_arccell(&graph, 1, 4, 71, d2);
+//	graph_insert_arccell(&graph, 2, 0, 27, d3);
+//	graph_insert_arccell(&graph, 2, 4, 36, d4);
+//	graph_insert_arccell(&graph, 3, 4, 42, d5);
+	//插入边数据
 	graph_insert_arccell(&graph, 0, 1, 15, d0);
-	graph_insert_arccell(&graph, 1, 3, 23, d1);
-	graph_insert_arccell(&graph, 1, 4, 71, d2);
-	graph_insert_arccell(&graph, 2, 0, 27, d3);
-	graph_insert_arccell(&graph, 2, 4, 36, d4);
-	graph_insert_arccell(&graph, 3, 4, 42, d5);
+	graph_insert_arccell(&graph, 3, 1, 23, d1);
+	graph_insert_arccell(&graph, 4, 1, 71, d2);
+	graph_insert_arccell(&graph, 0, 2, 27, d3);
+	graph_insert_arccell(&graph, 4, 2, 36, d4);
+	graph_insert_arccell(&graph, 4, 3, 42, d5);
 
 	/*
 	 * 显示邻接表，格式如下：
