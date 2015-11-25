@@ -73,7 +73,7 @@ bool graph_set_vertex(s_graph *graph, int index, void *data);
  */
 bool graph_insert_arccell(s_graph *graph, int i_index, int j_index, int weight, void *data);
 
-//深度优先访问顶点
+//深度优先搜索
 bool graph_depth_first_search(s_graph *graph);
 
 //深度优先访问顶点递归算法

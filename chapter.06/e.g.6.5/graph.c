@@ -207,7 +207,7 @@ bool graph_visit(s_graph *graph)
 	return true;
 }
 
-//深度优先访问顶点
+//深度优先搜索
 bool graph_depth_first_search(s_graph *graph)
 {
 	if (graph == null)
