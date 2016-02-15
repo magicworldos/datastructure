@@ -9,7 +9,7 @@ int main(int argc, char **args)
 	s_tree tree;
 	tree_init(&tree);
 
-	tree_insert(&tree, 5);
+	tree_insert(&tree, 1);
 	tree_insert(&tree, 3);
 	tree_insert(&tree, 4);
 	tree_insert(&tree, 6);
@@ -18,7 +18,7 @@ int main(int argc, char **args)
 	tree_insert(&tree, 9);
 	tree_insert(&tree, 8);
 	tree_insert(&tree, 0);
-	tree_insert(&tree, 1);
+	tree_insert(&tree, 5);
 
 	//中序遍历
 	tree_inorder_visit(&tree, tree.root);
