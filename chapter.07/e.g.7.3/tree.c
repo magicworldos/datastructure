@@ -137,7 +137,7 @@ bool tree_find(s_node *node, int val)
 			return tree_find(node->left_child, val);
 		}
 	}
-	//如果大于当前节点，则在其左子树上处理
+	//如果大于当前节点，则在其右子树上处理
 	else
 	{
 		//如果右子树为空

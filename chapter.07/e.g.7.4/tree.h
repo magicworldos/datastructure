@@ -47,17 +47,29 @@ void tree_clear(s_tree *tree, s_node *node);
 bool tree_insert(s_tree *tree, int val);
 
 //递归
-int tree_insert_node(s_node *p_node, int type_lr, s_node *node, int val);
+int tree_insert_node(s_tree *tree, s_node *p_node, int type_lr, s_node *node, int val);
 
 //计算平衡因子
 int tree_bf(s_node *node);
 
-//void tree_single_left(s_tree *tree, s_node *node);
-//void tree_single_right(s_tree *tree, s_node *node);
-//void tree_left_right(s_tree *tree, s_node *node);
-//void tree_right_left(s_tree *tree, s_node *node);
+//计算节点高度
+int tree_height(s_node *node);
+
+//单向左旋
+void tree_single_left(s_tree *tree, s_node *node);
+//单向右旋
+
+void tree_single_right(s_tree *tree, s_node *node);
+//先向左，后向右
+
+void tree_left_right(s_tree *tree, s_node *node);
+
+//先向右，后向左
+void tree_right_left(s_tree *tree, s_node *node);
 
 //中序遍历
 void tree_inorder_visit(s_tree *tree, s_node *node);
+
+int abs(int val);
 
 #endif /* TREE_H_ */
