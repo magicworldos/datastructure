@@ -49,12 +49,24 @@ bool tree_destroy(s_tree *tree);
 
 s_node* tree_search(s_node *node, int key);
 
-bool tree_insert(s_tree *tree, int val);
+bool tree_insert(s_tree *tree, int key);
 
 bool tree_insert_node(s_tree *tree, s_pk_node *pk_node, s_node *node, int key);
 
 void tree_insert_pk_node(s_pk_node *pk_node, int type, int key);
 
 void tree_split_node(s_tree *tree, s_node *node);
+
+bool tree_del(s_tree *tree, int key);
+
+bool tree_del_node(s_tree *tree, s_node *node, int key);
+
+s_pk_node* tree_find_pk_node(s_node *node, int key);
+
+bool tree_is_leaf(s_node *node);
+
+s_pk_node* tree_min_key(s_node *node);
+
+int divup(int a, int b);
 
 #endif /* TREE_H_ */

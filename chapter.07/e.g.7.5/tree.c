@@ -89,7 +89,6 @@ s_node* tree_search(s_node *node, int key)
 
 bool tree_insert(s_tree *tree, int key)
 {
-	//递归
 	return tree_insert_node(tree, null, tree->root, key);
 }
 
@@ -290,11 +289,7 @@ void tree_split_node(s_tree *tree, s_node *node)
 
 	int m = node->key_num;
 
-	int p_num = m / 2 - 1;
-	if (m == 3)
-	{
-		p_num = 1;
-	}
+	int p_num = divup(m, 2) - 1;
 	s_node *p = (s_node *) malloc(sizeof(s_node));
 	p->key_num = p_num;
 	p->parent = pk_parent;
@@ -318,11 +313,8 @@ void tree_split_node(s_tree *tree, s_node *node)
 	p_pk->next = null;
 
 	s_node *q = node;
-	int q_num = m - (m / 2);
-	if (m == 3)
-	{
-		q_num = 1;
-	}
+	int q_num = m - divup(m, 2);
+	q->parent = pk_parent;
 	q->key_num = q_num;
 	q->pk_node = r->next;
 	q->pk_node->pre = null;
@@ -335,7 +327,7 @@ void tree_split_node(s_tree *tree, s_node *node)
 		q_pk = q_pk->next;
 		//key
 		q_pk->header = q;
-		q_pk = p_pk->next;
+		q_pk = q_pk->next;
 	}
 
 	if (q_pk != null)
@@ -374,6 +366,7 @@ void tree_split_node(s_tree *tree, s_node *node)
 
 		r->pre = pk_node_pre;
 		r->next = pk_node_next;
+		r->header = p_new;
 
 		pk_node_next->pre = r;
 		pk_node_next->next = null;
@@ -416,4 +409,153 @@ void tree_split_node(s_tree *tree, s_node *node)
 	}
 
 	tree_split_node(tree, node);
+}
+
+bool tree_del(s_tree *tree, int key)
+{
+	return tree_del_node(tree, tree->root, key);
+}
+
+bool tree_del_node(s_tree *tree, s_node *node, int key)
+{
+	if (tree == null)
+	{
+		return false;
+	}
+
+	if (node == null)
+	{
+		return false;
+	}
+
+	s_node *p_del = tree_search(node, key);
+	if (p_del == null)
+	{
+		return false;
+	}
+
+	s_pk_node *pk_node_del = tree_find_pk_node(p_del, key);
+	if (pk_node_del == null)
+	{
+		return false;
+	}
+
+	if (!tree_is_leaf(p_del))
+	{
+		s_pk_node *pk_node_min = null;
+		if (pk_node_del->next->pk->child == null)
+		{
+			pk_node_min = pk_node_del->next->next;
+		}
+		else
+		{
+			pk_node_min = tree_min_key(pk_node_del->next->pk->child);
+		}
+
+		if (pk_node_min == null)
+		{
+			return false;
+		}
+
+		pk_node_del->pk->key = pk_node_min->pk->key;
+
+		tree_del_node(tree, pk_node_min->header, pk_node_min->pk->key);
+	}
+
+	int num = divup(tree->m, 2);
+	if (p_del->key_num >= num)
+	{
+		s_pk_node *pre = pk_node_del->pre;
+		pre->next = pk_node_del->next->next;
+		if (pre->next != null)
+		{
+			pre->next->pre = pre;
+		}
+
+		p_del->key_num--;
+		return true;
+	}
+
+//	if (p_del->key_num == num - 1)
+//	{
+//		//
+//		//
+//		//
+//		return true;
+//	}
+
+	return true;
+}
+
+int divup(int a, int b)
+{
+	int c = a / b;
+	int d = a % b;
+	if (d != 0)
+	{
+		c++;
+	}
+	return c;
+}
+
+bool tree_is_leaf(s_node *node)
+{
+	s_pk_node *pk_node = node->pk_node;
+	for (int i = 0; i < 2 * node->key_num + 1 && pk_node != null; i++)
+	{
+		if (i % 2 == 0)
+		{
+			if (pk_node->pk->child != null)
+			{
+				return false;
+			}
+		}
+		pk_node = pk_node->next;
+	}
+
+	return true;
+}
+
+s_pk_node* tree_find_pk_node(s_node *node, int key)
+{
+	if (node == null)
+	{
+		return null;
+	}
+
+	s_pk_node *p = node->pk_node;
+	for (int i = 0; i < 2 * node->key_num + 1 && p != null; i++)
+	{
+		if (i % 2 == 1)
+		{
+			if (p->pk->key == key)
+			{
+				return p;
+			}
+		}
+		p = p->next;
+	}
+
+	return null;
+}
+
+s_pk_node* tree_min_key(s_node *node)
+{
+	if (node == null)
+	{
+		return null;
+	}
+
+	s_pk_node *pk_node = node->pk_node;
+	if (pk_node == null)
+	{
+		return null;
+	}
+
+	if (pk_node->pk->child == null)
+	{
+		return pk_node->next;
+	}
+
+	return tree_min_key(pk_node->pk->child);
 }

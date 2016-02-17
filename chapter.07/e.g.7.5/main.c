@@ -20,8 +20,9 @@ int main(int argc, char **args)
 	tree_insert(&tree, 0);
 	tree_insert(&tree, 5);
 
-	//中序遍历
-	//tree_inorder_visit(&tree, tree.root);
+	tree_del(&tree, 1);
+	tree_del(&tree, 4);
+	tree_del(&tree, 8);
 
 	for (int i = 0; i < 10; ++i)
 	{
