@@ -471,20 +471,154 @@ bool tree_del_node(s_tree *tree, s_node *node, int key)
 		{
 			pre->next->pre = pre;
 		}
-
+		free(pk_node_del);
 		p_del->key_num--;
 		return true;
 	}
 
-//	if (p_del->key_num == num - 1)
-//	{
-//		//
-//		//
-//		//
-//		return true;
-//	}
+	if (p_del->key_num == num - 1)
+	{
+		if (p_del->parent == null)
+		{
+			s_pk_node *pk = p_del->pk_node;
+			while (pk->next != null)
+			{
+				if (pk->next == pk_node_del)
+				{
+					pk->next = pk_node_del->next->next;
+					if (pk_node_del->next->next != null)
+					{
+						pk_node_del->next->next->pre = pk;
+					}
+					free(pk_node_del);
+				}
+				pk = pk->next;
+			}
+			p_del->key_num--;
+			if (p_del->key_num == 0)
+			{
+				tree->root = null;
+				free(p_del);
+			}
+			return true;
+		}
 
-	return true;
+		if (p_del->parent->next != null && p_del->parent->next->next->pk->child != null)
+		{
+			if (p_del->parent->next->next->pk->child->key_num > num - 1)
+			{
+				s_pk_node *pkn = p_del->parent->next->next->pk->child->pk_node;
+				pk_node_del->pk->key = p_del->parent->next->pk->key;
+				p_del->parent->next->pk->key = p_del->parent->next->next->pk->child->pk_node->next->pk->key;
+				p_del->parent->next->next->pk->child->pk_node = p_del->parent->next->next->pk->child->pk_node->next->next;
+				p_del->parent->next->next->pk->child->pk_node->next->next->pre = null;
+				p_del->parent->next->next->pk->child->key_num--;
+
+				free(pkn->next);
+				free(pkn);
+
+				return true;
+			}
+			else if (p_del->parent->next->next->pk->child->key_num == num - 1)
+			{
+				tree_merge(tree, p_del, pk_node_del);
+				return true;
+			}
+		}
+
+		if (p_del->parent->pre != null && p_del->parent->pre->pre->pk->child != null)
+		{
+			if (p_del->parent->pre->pre->pk->child->key_num > num - 1)
+			{
+				pk_node_del->pk->key = p_del->parent->pre->pk->key;
+
+				s_pk_node *pk_max = p_del->parent->pre->pre->pk->child->pk_node;
+				while (pk_max->next != null)
+				{
+					pk_max = pk_max->next;
+				}
+				pk_max = pk_max->pre;
+
+				p_del->parent->pre->pk->key = pk_max->pk->key;
+				pk_max->pre->next = null;
+				p_del->parent->pre->pre->pk->child->key_num--;
+
+				free(pk_max->next);
+				free(pk_max);
+
+				return true;
+			}
+			else if (p_del->parent->pre->pre->pk->child->key_num == num - 1)
+			{
+				tree_merge(tree, p_del, pk_node_del);
+				return true;
+			}
+		}
+		return false;
+	}
+	return false;
+}
+
+void tree_merge(s_tree *tree, s_node *p_del, s_pk_node *pk_node_del)
+{
+	int num = divup(tree->m, 2);
+
+	if (p_del->parent->next != null && p_del->parent->next->next->pk->child != null)
+	{
+		if (p_del->parent->next->next->pk->child->key_num == num - 1)
+		{
+			s_node *right_node = p_del->parent->next->next->pk->child;
+			s_pk_node *p = p_del->pk_node;
+			int tnum = p_del->key_num;
+			s_pk_node *parent_p = p_del->parent;
+			s_pk_node *parent_key = parent_p->next;
+			s_pk_node *parent_n = parent_key->next;
+			for (int i = 0; i < 2 * p_del->key_num + 1; i++)
+			{
+				if (i % 2 == 1)
+				{
+					if (p == pk_node_del)
+					{
+						p = p->pre;
+						p->next = pk_node_del->next->next;
+						if (pk_node_del->next->next != null)
+						{
+							pk_node_del->next->next->pre = p;
+						}
+						p = p_del->pk_node;
+						pk_node_del->pk->key = parent_key->pk->key;
+						while (p->next != null)
+						{
+							p = p->next;
+						}
+						p->next = pk_node_del;
+						pk_node_del->pre = p;
+
+						p = p_del->pk_node;
+						s_node *right_node = parent_n->pk->child;
+						right_node->pk_node->next->pre = pk_node_del->next;
+						pk_node_del->next->next = right_node->pk_node->next;
+						right_node->pk_node->next = p;
+						p->pre = right_node->pk_node;
+						right_node->key_num += tnum;
+
+						free(p_del);
+					}
+				}
+				p = p->next;
+			}
+
+			return;
+		}
+	}
+
+	if (p_del->parent->pre != null && p_del->parent->pre->pre->pk->child != null)
+	{
+		if (p_del->parent->pre->pre->pk->child->key_num == num - 1)
+		{
+			return;
+		}
+	}
 }
 
 int divup(int a, int b)

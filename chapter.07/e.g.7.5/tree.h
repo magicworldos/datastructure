@@ -24,7 +24,6 @@ typedef struct s_pk_node
 	struct s_pk_node *next;
 } s_pk_node;
 
-//二叉树节点
 typedef struct s_node
 {
 	s_pk_node *parent;
@@ -32,7 +31,6 @@ typedef struct s_node
 	s_pk_node *pk_node;
 } s_node;
 
-//二叉树数据结构
 typedef struct s_tree
 {
 	//根节点
@@ -66,6 +64,8 @@ s_pk_node* tree_find_pk_node(s_node *node, int key);
 bool tree_is_leaf(s_node *node);
 
 s_pk_node* tree_min_key(s_node *node);
+
+void tree_merge(s_tree *tree, s_node *p_del, s_pk_node *pk_node_del);
 
 int divup(int a, int b);
 
