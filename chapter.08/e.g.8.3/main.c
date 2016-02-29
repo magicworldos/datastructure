@@ -59,7 +59,7 @@ int main(int argc, char **args)
 	int array[SIZE] =
 	{ 9, 3, 1, 2, 5, 8, 7, 0, 6, 4 };
 	display(array, SIZE);
-	bubble_sort2(array, SIZE);
+	bubble_sort(array, SIZE);
 	display(array, SIZE);
 
 	int array2[SIZE] =
