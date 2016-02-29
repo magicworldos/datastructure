@@ -3,7 +3,7 @@
 #define SIZE	(10)
 
 //快速排序
-void quick_sort(int array[], int size)
+void quick_sort(int *array, int size)
 {
 	//低指针从头开始
 	int low = 0;

@@ -3,7 +3,7 @@
 #define SIZE	(10)
 
 //冒泡排序
-void bubble_sort(int array[], int size)
+void bubble_sort(int *array, int size)
 {
 	for (int i = 0; i < size - 1; i++)
 	{
@@ -21,7 +21,7 @@ void bubble_sort(int array[], int size)
 }
 
 //冒泡排序
-void bubble_sort2(int array[], int size)
+void bubble_sort2(int *array, int size)
 {
 	for (int i = 0; i < size; i++)
 	{

@@ -3,7 +3,7 @@
 #define SIZE	(10)
 
 //子表插入排序
-void shell_insert(int array[], int size, int i, int m)
+void shell_insert(int *array, int size, int i, int m)
 {
 	//子表循环
 	for (int j = i + m; j < size; j += m)

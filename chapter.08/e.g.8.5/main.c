@@ -25,7 +25,7 @@ int min_ind(int *array, int size, int start)
 }
 
 //选择排序
-void select_sort(int array[], int size)
+void select_sort(int *array, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
