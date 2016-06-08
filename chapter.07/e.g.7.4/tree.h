@@ -49,6 +49,22 @@ bool tree_insert(s_tree *tree, int val);
 //递归
 int tree_insert_node(s_tree *tree, s_node *p_node, int type_lr, s_node *node, int val);
 
+//根据val到二叉树中查找
+bool tree_delete(s_tree *tree, int val);
+
+//递归
+int tree_delete_node(s_tree *tree, s_node *p_node, int type_lr, s_node *node, int val);
+
+int tree_delete_node_leaf(s_tree *tree, s_node *node);
+
+bool tree_delete_bf(s_tree *tree, s_node *node);
+
+void tree_reset_height(s_tree *tree, s_node *node);
+
+s_node* tree_find_max_node(s_node *node);
+
+s_node* tree_find_min_node(s_node *node);
+
 //计算平衡因子
 int tree_bf(s_node *node);
 

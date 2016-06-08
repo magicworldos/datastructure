@@ -208,6 +208,293 @@ int tree_insert_node(s_tree *tree, s_node *p_node, int type_lr, s_node *node, in
 	return ret_height;
 }
 
+//根据val到二叉树中查找
+bool tree_delete(s_tree *tree, int val)
+{
+	if (tree == null)
+	{
+		return false;
+	}
+
+	//如果二叉树没有根节点
+	if (tree->root == null)
+	{
+		return false;
+	}
+	else
+	{
+		//递归
+		return tree_delete_node(tree, null, 0, tree->root, val);
+	}
+}
+
+//递归
+int tree_delete_node(s_tree *tree, s_node *p_node, int type_lr, s_node *node, int val)
+{
+	if (node == null)
+	{
+		return 0;
+	}
+
+	//找到节点
+	if (val == node->weight)
+	{
+		tree_delete_node_leaf(tree, node);
+	}
+	//如果小于当前节点，则在其左子树上处理
+	else if (val < node->weight)
+	{
+		tree_delete_node(tree, node, 0, node->left_child, val);
+	}
+	//如果大于当前节点，则在其右子树上处理
+	else
+	{
+		tree_delete_node(tree, node, 1, node->right_child, val);
+	}
+	return 0;
+}
+
+int tree_delete_node_leaf(s_tree *tree, s_node *node)
+{
+	if (tree == null)
+	{
+		return 0;
+	}
+
+	//如果是叶子节点
+	if (node->left_child == null && node->right_child == null)
+	{
+		if (node->parent == null)
+		{
+			tree->root = null;
+		}
+		else
+		{
+			s_node *parent = node->parent;
+			if (node == parent->left_child)
+			{
+				parent->left_child = null;
+				parent->bf--;
+			}
+			else if (node == parent->right_child)
+			{
+				parent->right_child = null;
+				parent->bf++;
+			}
+
+			//叶子节点
+			tree_delete_bf(tree, parent);
+		}
+		free(node);
+	}
+	//如果只有左子树
+	else if (node->left_child != null && node->right_child == null)
+	{
+		if (node->parent == null)
+		{
+			tree->root = node->left_child;
+			node->left_child->parent = null;
+		}
+		else
+		{
+			s_node *parent = node->parent;
+			if (node == parent->left_child)
+			{
+				parent->left_child = node->left_child;
+				node->left_child->parent = parent;
+				parent->bf--;
+			}
+			else if (node == parent->right_child)
+			{
+				parent->right_child = node->left_child;
+				node->left_child->parent = parent;
+				parent->bf++;
+			}
+
+			//叶子节点
+			tree_delete_bf(tree, parent);
+		}
+		free(node);
+	}
+	//如果只有右子树
+	else if (node->left_child == null && node->right_child != null)
+	{
+		if (node->parent == null)
+		{
+			tree->root = node->right_child;
+			node->right_child->parent = null;
+		}
+		else
+		{
+			s_node *parent = node->parent;
+			if (node == parent->left_child)
+			{
+				parent->left_child = node->right_child;
+				node->right_child->parent = parent;
+				parent->bf--;
+			}
+			else if (node == parent->right_child)
+			{
+				parent->right_child = node->right_child;
+				node->right_child->parent = parent;
+				parent->bf++;
+			}
+
+			//叶子节点
+			tree_delete_bf(tree, parent);
+		}
+		free(node);
+	}
+	//既有左子树也有右子树
+	else
+	{
+		//如果平衡因子>=0说明左高右低
+		if (node->bf >= 0)
+		{
+			//找到node节点的左子树中权值最大的节点
+			s_node *node_del = tree_find_max_node(node->left_child);
+			//节点数据交换
+			s_node node_temp;
+			node_temp.weight = node_del->weight;
+			node_del->weight = node->weight;
+			node->weight = node_temp.weight;
+
+			tree_delete_node_leaf(tree, node_del);
+		}
+		//如果平衡因子<0说明左低右高
+		else
+		{
+			//找到node节点的右子树中权值最小的节点
+			s_node *node_del = tree_find_min_node(node->right_child);
+			//节点数据交换
+			s_node node_temp;
+			node_temp.weight = node_del->weight;
+			node_del->weight = node->weight;
+			node->weight = node_temp.weight;
+
+			tree_delete_node_leaf(tree, node_del);
+		}
+	}
+	return 0;
+}
+
+bool tree_delete_bf(s_tree *tree, s_node *node)
+{
+	if (tree == null)
+	{
+		return false;
+	}
+
+	if (node == null)
+	{
+		return false;
+	}
+
+	if (node->bf == 0)
+	{
+		node->height--;
+		tree_reset_height(tree, node);
+	}
+	else if (abs(node->bf) == 1)
+	{
+		//tree_reset_height(tree, node);
+	}
+	else if (node->bf > 1 && node->left_child->bf > 0)
+	{
+		tree_single_right(tree, node);
+	}
+	else if (node->bf > 1 && node->left_child->bf <= 0)
+	{
+		tree_left_right(tree, node);
+	}
+	else if (node->bf < -1 && node->left_child->bf < 0)
+	{
+		tree_single_left(tree, node);
+	}
+	else if (node->bf < -1 && node->left_child->bf >= 0)
+	{
+		tree_right_left(tree, node);
+	}
+
+	return true;
+}
+
+void tree_reset_height(s_tree *tree, s_node *node)
+{
+	if (tree == null)
+	{
+		return;
+	}
+
+	while (node->parent != null)
+	{
+		if (node == node->parent->left_child)
+		{
+			if (node->parent->bf == 0)
+			{
+				node->parent->bf--;
+				return;
+			}
+			else if (node->parent->bf > 0)
+			{
+				node->parent->bf--;
+				node->parent->height--;
+			}
+			else
+			{
+				//error
+				return;
+			}
+		}
+		else if (node == node->parent->right_child)
+		{
+			if (node->parent->bf == 0)
+			{
+				node->parent->bf++;
+				return;
+			}
+			else if (node->parent->bf < 0)
+			{
+				node->parent->bf++;
+				node->parent->height--;
+			}
+			else
+			{
+				//error
+				return;
+			}
+		}
+
+		node = node->parent;
+	}
+}
+
+s_node* tree_find_max_node(s_node *node)
+{
+	if (node == null)
+	{
+		return null;
+	}
+	while (node->right_child != null)
+	{
+		node = node->right_child;
+	}
+	return node;
+}
+
+s_node* tree_find_min_node(s_node *node)
+{
+	if (node == null)
+	{
+		return null;
+	}
+	while (node->left_child != null)
+	{
+		node = node->left_child;
+	}
+	return node;
+}
+
 //计算平衡因子
 int tree_bf(s_node *node)
 {

@@ -20,6 +20,10 @@ int main(int argc, char **args)
 	tree_insert(&tree, 0);
 	tree_insert(&tree, 5);
 
+	tree_delete(&tree, 3);
+	tree_delete(&tree, 5);
+	tree_delete(&tree, 4);
+
 	//中序遍历
 	tree_inorder_visit(&tree, tree.root);
 

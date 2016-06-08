@@ -220,11 +220,11 @@ void tree_preamble_visit(s_tree *tree, s_node *node)
 		return;
 	}
 
-//中
+	//中
 	tree->visit_node(node->data);
-//左
+	//左
 	tree_preamble_visit(tree, node->left_child);
-//右
+	//右
 	tree_preamble_visit(tree, node->right_child);
 }
 
@@ -244,7 +244,7 @@ bool tree_create(s_tree *tree, s_list *list)
 		return false;
 	}
 
-//当有序链表中前两个节点不为空时
+	//当有序链表中前两个节点不为空时
 	while (list->next != null && list->next->next != null)
 	{
 		//取出有序链表中第一个节点
@@ -285,11 +285,11 @@ bool tree_create(s_tree *tree, s_list *list)
 		list_insert(list, weights, n_node);
 	}
 
-//经由上面处理后，有序链表中只留下一个节点
+	//经由上面处理后，有序链表中只留下一个节点
 	s_list *p = list->next;
-//取得二叉树的根节点
+	//取得二叉树的根节点
 	s_node *n_root = (s_node *) p->data;
-//设定二叉树的根节点
+	//设定二叉树的根节点
 	tree->root = n_root;
 
 	return true;
