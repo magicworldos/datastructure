@@ -407,11 +407,11 @@ bool tree_delete_bf(s_tree *tree, s_node *node)
 	{
 		tree_left_right(tree, node);
 	}
-	else if (node->bf < -1 && node->left_child->bf < 0)
+	else if (node->bf < -1 && node->right_child->bf < 0)
 	{
 		tree_single_left(tree, node);
 	}
-	else if (node->bf < -1 && node->left_child->bf >= 0)
+	else if (node->bf < -1 && node->right_child->bf >= 0)
 	{
 		tree_right_left(tree, node);
 	}
