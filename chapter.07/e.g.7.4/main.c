@@ -1,44 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "tree.h"
+#include <time.h>
+#include <avl_tree.h>
 
 int main(int argc, char **args)
 {
-
-	//初始化树
-	s_tree tree;
-	tree_init(&tree);
-
-//	tree_insert(&tree, 1);
-//	tree_insert(&tree, 3);
-//	tree_insert(&tree, 4);
-//	tree_insert(&tree, 6);
-//	tree_insert(&tree, 7);
-//	tree_insert(&tree, 2);
-//	tree_insert(&tree, 9);
-//	tree_insert(&tree, 8);
-//	tree_insert(&tree, 0);
-//	tree_insert(&tree, 5);
-//
-//	tree_delete(&tree, 3);
-//	tree_delete(&tree, 5);
-//	tree_delete(&tree, 4);
+	srand((int) time(0));
+	s_avl_tree tree;
+	avl_tree_init(&tree);
 
 	for (int i = 0; i < 100; i++)
 	{
-		tree_insert(&tree, i);
+		avl_tree_put(&tree, rand() % 100, NULL);
 	}
 
-	for (int i = 0; i < 90; i++)
-	{
-		tree_delete(&tree, i);
-	}
+	avl_tree_inorder_visit(&tree, tree.root);
+	printf("\n");
+	avl_tree_inorder_display(&tree, tree.root, 0);
 
-	//中序遍历
-	tree_inorder_visit(&tree, tree.root);
-
-	//销毁树
-	tree_destroy(&tree);
+	avl_tree_destroy(&tree);
 
 	return 0;
 }
