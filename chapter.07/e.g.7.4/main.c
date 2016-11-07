@@ -6,35 +6,28 @@
 
 int main(int argc, char **args)
 {
-	int N = 20;
-	srand((int) time(0));
+	//初始化树
 	s_avl_tree tree;
 	avl_tree_init(&tree);
-	int keys[N];
-	for (int i = 0; i < N; i++)
-	{
-		keys[i] = rand() % (N * 100);
-		avl_tree_put(&tree, keys[i], NULL);
-	}
 
-	printf("--------------------------------------------------\n");
-	avl_tree_inorder_display(&tree, tree.root, 0);
-	printf("--------------------------------------------------\n");
+	avl_tree_put(&tree, 0, NULL);
+	avl_tree_put(&tree, 1, NULL);
+	avl_tree_put(&tree, 2, NULL);
+	avl_tree_put(&tree, 3, NULL);
+	avl_tree_put(&tree, 4, NULL);
+	avl_tree_put(&tree, 5, NULL);
+	avl_tree_put(&tree, 6, NULL);
+	avl_tree_put(&tree, 7, NULL);
+	avl_tree_put(&tree, 8, NULL);
+	avl_tree_put(&tree, 9, NULL);
+
+	//中序遍历
 	avl_tree_inorder_visit(&tree, tree.root);
+	//显示树型结构
+	avl_tree_inorder_display(&tree, tree.root, 0);
 
-	for (int i = 0; i < N; i++)
-	{
-		printf("--------------------------------------------------\n");
-		printf("rm %d\n", keys[i]);
-		avl_tree_remove(&tree, keys[i]);
-		avl_tree_inorder_display(&tree, tree.root, 0);
-		printf("--------------------------------------------------\n");
-		avl_tree_inorder_visit(&tree, tree.root);
-	}
-
+	//销毁树
 	avl_tree_destroy(&tree);
-
-	printf("Done\n");
 
 	return 0;
 }
